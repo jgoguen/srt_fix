@@ -281,9 +281,11 @@ class srt_fixPP(PostProcessor):
             lang_for_original = lang + backup_tag_string
             modified_subtitles[lang_for_original] = sub_info.copy()
             original_filepath = modified_subtitles[lang_for_original].get('filepath')
-            # HACK: This should be done properly with pathlib or yt-dlp replace_extension()
-            original_filepath = original_filepath.replace('.' + lang + '.', '.' + lang_for_original + '.')
-            modified_subtitles[lang_for_original]['filepath'] = original_filepath
+
+            if not self._kwargs.get("replace_file", False):
+                # HACK: This should be done properly with pathlib or yt-dlp replace_extension()
+                original_filepath = original_filepath.replace('.' + lang + '.', '.' + lang_for_original + '.')
+                modified_subtitles[lang_for_original]['filepath'] = original_filepath
             
             subtitle_data = sub_info.get('data')
             if not subtitle_data:
